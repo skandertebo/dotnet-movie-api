@@ -1,0 +1,12 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model IEnumerable<TP1.Models.Movie>
+<h2>Test Vue Index</h2>
+@foreach (var item in Model)
+ {
+ <h3>@item.Title</h3>
+ }
