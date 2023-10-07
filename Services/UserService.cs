@@ -35,7 +35,7 @@ namespace TP1.Services
             throw new NotImplementedException();
         }
 
-        public UserLoginReponse Login(string email, string password)
+        public UserLoginResponse Login(string email, string password)
         {
             throw new NotImplementedException(); 
         }
