@@ -8,6 +8,7 @@ namespace TP1.Services
     public interface IJwtService
     {
         string GenerateToken(ClaimsIdentity claims);
+        public ClaimsPrincipal VerifyToken(string token);
     }
     public class JwtService : IJwtService
     {
@@ -20,14 +21,14 @@ namespace TP1.Services
 
         public string GenerateToken(ClaimsIdentity claims)
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                _configuration["JwtSettings:Issuer"],
-                _configuration["JwtSettings:Audience"],
+                _configuration["Jwt:Issuer"],
+                _configuration["Jwt:Audience"],
                 claims.Claims,
-                expires: DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["JwtSettings:ExpiresInMinutes"])),
+                expires: DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["Jwt:ExpiresInMinutes"])),
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
@@ -35,7 +36,7 @@ namespace TP1.Services
 
         public ClaimsPrincipal VerifyToken(string token)
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var tokenHandler = new JwtSecurityTokenHandler();
 
             try
@@ -46,8 +47,8 @@ namespace TP1.Services
                     IssuerSigningKey = key,
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidIssuer = _configuration["JwtSettings:Issuer"],
-                    ValidAudience = _configuration["JwtSettings:Audience"],
+                    ValidIssuer = _configuration["Jwt:Issuer"],
+                    ValidAudience = _configuration["Jwt:Audience"],
                     ClockSkew = TimeSpan.Zero // You can adjust this to allow for some clock drift
                 }, out SecurityToken validatedToken);
 

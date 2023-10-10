@@ -4,6 +4,7 @@ using TP1.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using TP1;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -22,6 +23,8 @@ builder.Services.AddCors(options =>
                           policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
                       });
 });
+builder.Services.AddTransient<IHashingService, HashingService>();
+builder.Services.AddTransient<IJwtService, JwtService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddAuthentication(options =>
 {
@@ -41,6 +44,10 @@ builder.Services.AddAuthentication(options =>
         ValidateLifetime = false,
         ValidateIssuerSigningKey = true
     };
+});
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add(new BadRequestExceptionFilter());
 });
 var app = builder.Build();
 
@@ -80,5 +87,4 @@ app.Use(async (context, next) =>
     await next();
 });
 app.MapRazorPages();
-
 app.Run();

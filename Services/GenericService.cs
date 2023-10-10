@@ -7,8 +7,8 @@ namespace TP1.Services
 {
     public class GenericService<T> where T : BaseEntity
     {
-        private readonly MovieDbContext _context;
-        private readonly DbSet<T> _repository;
+        protected readonly MovieDbContext _context;
+        protected readonly DbSet<T> _repository;
 
         public GenericService(MovieDbContext context)
         {
