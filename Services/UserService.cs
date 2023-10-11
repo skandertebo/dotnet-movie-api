@@ -54,8 +54,8 @@ namespace TP1.Services
             {
                 return null;
             }
-            var user = _repository.First(u => u.Id == id);
-            return null;
+            var user = _repository.FirstOrDefault(u => u.Id == id);
+            return user;
         }
 
         public User? GetUserByEmail(string email)

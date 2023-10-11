@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TP1;
+using TP1.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -26,6 +27,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddTransient<IHashingService, HashingService>();
 builder.Services.AddTransient<IJwtService, JwtService>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IMovieService, MovieService>();
+builder.Services.AddScoped<AuthMiddleware>();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

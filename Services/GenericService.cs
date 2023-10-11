@@ -5,7 +5,16 @@ using TP1.ReponseExceptions;
 
 namespace TP1.Services
 {
-    public class GenericService<T> where T : BaseEntity
+    public interface IGenericService<T> where T : BaseEntity
+    {
+        public IEnumerable<T> FindAll(int? page, int? offset);
+        public T? FindById(int id);
+        public T? Create(T creationDto);
+        public T? Update(T updateDto);
+        public T? Delete(int id);
+
+    }
+    public class GenericService<T>: IGenericService<T> where T : BaseEntity
     {
         protected readonly MovieDbContext _context;
         protected readonly DbSet<T> _repository;
@@ -16,7 +25,7 @@ namespace TP1.Services
             _repository = _context.Set<T>();
         }
 
-        public IEnumerable<T> GetAllAsync(int? page, int? offset)
+        public IEnumerable<T> FindAll(int? page, int? offset)
         {
             var allElements = _repository.ToList();
             if(page != null)

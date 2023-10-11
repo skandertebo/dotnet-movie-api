@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TP1.Dto.UserDto;
+using TP1.Middleware;
 using TP1.Models;
+using TP1.ResponseExceptions;
 using TP1.Responses;
 using TP1.Services;
 
@@ -28,6 +30,15 @@ namespace TP1.Controllers
            
             return _userService.Signup(createUserDto);
            
+        }
+
+        [HttpGet("whoami")]
+        [ServiceFilter(typeof(AuthMiddleware))]
+        public UserResponseDto GetUserFromJWT()
+        {
+            var user = (User)HttpContext.Items["user"];
+            if (user==null) { throw new BadRequestException("Unexpected?"); }
+            return new UserResponseDto(user);
         }
     }
 }
